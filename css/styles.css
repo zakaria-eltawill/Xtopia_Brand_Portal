@@ -636,8 +636,8 @@ blockquote cite { display: block; font-family: 'Acumin','Plus Jakarta Sans',sans
 .mockup-billboard { aspect-ratio:4/1; background:var(--navy-deep); border-radius:12px; display:flex; align-items:center; justify-content:center; gap:32px; padding:24px 48px; position:relative; overflow:hidden; border:1px solid rgba(239,237,227,.08); box-shadow:0 24px 48px rgba(0,0,0,.3); }
 .mockup-billboard::before { content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:linear-gradient(180deg, var(--accent-fg), #8B0008); }
 .mockup-billboard::after  { content:""; position:absolute; inset:0; background:radial-gradient(ellipse 40% 80% at 15% 50%, rgba(53,0,4,.25), transparent); }
-.bb-logo { position:relative; z-index:1; }
-.bb-logo img { height:22px; }
+.bb-logo { position:relative; z-index:1; width:fit-content; flex-shrink:0; }
+.bb-logo img { height:22px; width:auto; }
 .bb-vdiv { width:1px; height:36px; background:rgba(239,237,227,.18); position:relative; z-index:1; }
 .bb-text { font-family:'Barques','Syne',sans-serif; font-size:clamp(10px,1.4vw,15px); color:var(--cream); letter-spacing:.1em; position:relative; z-index:1; }
 
@@ -921,4 +921,27 @@ footer .logo {
   .motion-timing { grid-template-columns: 1fr; }
   .awards-card-header, .awards-photos { grid-template-columns: 1fr; }
   .awards-header-left { border-right: none; border-bottom: 1px solid var(--divider); }
+
+  /* --- Typography mobile fixes --- */
+  .type-specimen-card { grid-template-columns: 1fr; min-height: auto; }
+  .tsc-meta { padding: 28px 24px; border-right: none; border-bottom: 1px solid var(--divider); }
+  .tsc-specimen { min-height: 160px; padding: 28px 24px; }
+  .tsc-specimen--display span { font-size: 28px; }
+  .tsc-specimen--body span { font-size: 18px; }
+  .tsc-specimen--serif span { font-size: 20px; }
+  /* Hide large specimen text on type scale — size + tag is enough on mobile */
+  .ts-sample { display: none; }
+  .ts-row { grid-template-columns: 40px 1fr; gap: 16px; }
+  .type-specimen-plate { padding: 28px 20px 24px; }
+  .tsp-alpha { font-size: 13px; letter-spacing: .04em; }
+  .tsp-numerals { font-size: 28px; }
+
+  /* --- Snippets split panel mobile fix --- */
+  .snip-split { grid-template-columns: 1fr; height: auto; }
+  .snip-preview { min-height: 200px; }
+  .snip-code { max-height: 260px; overflow: auto; }
+
+  /* --- Letterforms grid — already at 3 col, reduce padding --- */
+  .lf-cell { padding: 20px 14px 18px; }
+  .lf-letter { font-size: 40px; margin-bottom: 10px; }
 }
