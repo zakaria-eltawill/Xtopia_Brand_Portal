@@ -255,7 +255,7 @@ main { margin-left: 250px; width: calc(100% - 250px); }
 /* ── Wordmark Behaviors ── */
 .wm-behaviors-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; border-radius: 16px; overflow: hidden; background: var(--divider); border: 1px solid var(--divider); }
 .wm-bcard { display: flex; flex-direction: column; }
-.wm-bcard-stage { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; padding: 32px 20px; overflow: hidden; }
+.wm-bcard-stage { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; padding: 32px 20px; overflow: hidden; position: relative; }
 .wm-bcard-logo { width: 82%; max-width: 180px; display: block; transition: transform .35s cubic-bezier(0,0,.2,1); }
 .wm-bcard:hover .wm-bcard-logo { transform: scale(1.05); }
 .wm-bcard-info { padding: 18px 20px 20px; background: var(--card); border-top: 1px solid var(--divider); display: flex; flex-direction: column; gap: 4px; }
@@ -576,7 +576,7 @@ blockquote cite { display: block; font-family: 'Acumin','Plus Jakarta Sans',sans
 
 /* ---------- Brand in Use ---------- */
 .biu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; background: var(--divider); border: 1px solid var(--divider); border-radius: 20px; overflow: hidden; }
-.biu-card { background: var(--bg); display: flex; flex-direction: column; }
+.biu-card { background: var(--bg); display: flex; flex-direction: column; position: relative; }
 .biu-card--wide { grid-column: span 2; }
 .biu-card--full { grid-column: span 3; }
 .biu-surface-tag { padding: 11px 20px; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; color: var(--fg-dim); border-bottom: 1px solid var(--divider); display: flex; align-items: center; gap: 8px; }
@@ -768,6 +768,280 @@ html[data-theme="light"] .partners-cloud img { filter: brightness(0); }
 .card-comp .card-title { font-family: 'Barques','Syne',sans-serif; font-size: 20px; margin-bottom: 8px; }
 .card-comp .card-body   { font-size: 14px; color: var(--fg-dim); }
 
+/* ---------- Beam Ring — border beam for existing cards -------
+   CSS mask technique: shows only the 1px border ring of the
+   absolutely-positioned wrapper, while the rotating conic
+   gradient inside creates the sweeping beam.
+   ------------------------------------------------------------ */
+.xt-beam-ring {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  padding: 1px;
+  overflow: hidden;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.xt-beam-ring::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 300%; aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 74%,
+    rgba(193,198,163,0.32) 82%,
+    rgba(239,237,227,0.82) 86%,
+    rgba(193,198,163,0.32) 90%,
+    transparent 100%
+  );
+  animation: xt-beam-rotate 4s linear infinite;
+}
+/* Slower beam for wide / full-bleed cards */
+.xt-beam-ring--slow::before { animation-duration: 6s; }
+/* Hero panel rounded corners */
+.wm-hero-left .xt-beam-ring { border-radius: 16px 0 0 16px; }
+
+/* ── Mock scan line overlay ──────────────────────────────────── */
+.xt-mock-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+.xt-mock-scan::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(193,198,163,0.12) 10%,
+    rgba(193,198,163,0.72) 50%,
+    rgba(239,237,227,0.52) 55%,
+    rgba(193,198,163,0.12) 90%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px 1px rgba(193,198,163,0.20);
+  animation: xt-scan-drift 4s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+.xt-mock-scan--offset::before  { animation-delay: -1.6s; }
+.xt-mock-scan--slow::before    { animation-duration: 5.5s; animation-delay: -2.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .xt-beam-ring::before { animation: none; }
+  .xt-mock-scan::before { animation: none; opacity: 0.35; transform: translateY(60%); }
+}
+
+/* ---------- Component Demos — Animated (Nash-style) ---------- */
+
+/* ── Aurora Button ──────────────────────────────────────────── */
+@keyframes xt-aurora-sweep {
+  0%   { left: -60%; opacity: 0; }
+  8%   { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { left: 120%; opacity: 0; }
+}
+.xt-aurora-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: rgba(0,23,36,0.88);
+  border: 1px solid rgba(193,198,163,0.20);
+  color: var(--cream);
+  font-family: 'Acumin','Plus Jakarta Sans',sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
+}
+html[data-theme="light"] .xt-aurora-btn {
+  background: rgba(0,23,36,0.94);
+}
+.xt-aurora-btn:hover {
+  border-color: rgba(193,198,163,0.40);
+  box-shadow: 0 0 28px rgba(193,198,163,0.10);
+}
+.xt-aurora-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+  animation: dot-pulse 2.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.xt-aurora-sweep {
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 55%; height: 200%;
+  transform: skewX(-18deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(193,198,163,0.07) 35%,
+    rgba(239,237,227,0.12) 50%,
+    rgba(193,198,163,0.07) 65%,
+    transparent 100%
+  );
+  animation: xt-aurora-sweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+.comp-demo-hint {
+  font-size: 10px;
+  color: var(--fg-dim);
+  opacity: 0.45;
+  letter-spacing: 0.08em;
+  font-family: 'Fira Code','Cascadia Code','Consolas',monospace;
+  margin-top: 4px;
+}
+
+/* ── Border Beam ────────────────────────────────────────────── */
+@keyframes xt-beam-rotate {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.xt-beam-wrap {
+  position: relative;
+  border-radius: 10px;
+  padding: 1px;
+  overflow: hidden;
+  width: 100%;
+  background: transparent;
+}
+.xt-beam-wrap::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 300%; aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 74%,
+    rgba(193,198,163,0.35) 82%,
+    rgba(239,237,227,0.90) 86%,
+    rgba(193,198,163,0.35) 90%,
+    transparent 100%
+  );
+  animation: xt-beam-rotate 3s linear infinite;
+}
+.xt-beam-wrap--slow::before {
+  animation-duration: 5s;
+  background: conic-gradient(
+    from 0deg,
+    transparent 78%,
+    rgba(193,198,163,0.20) 84%,
+    rgba(193,198,163,0.55) 88%,
+    rgba(193,198,163,0.20) 92%,
+    transparent 100%
+  );
+}
+.xt-beam-inner {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-deep);
+  border-radius: 9px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.xt-code-hint {
+  font-family: 'Fira Code','Cascadia Code','Consolas',monospace;
+  font-size: 10px;
+  color: var(--fg-dim);
+  opacity: 0.5;
+  letter-spacing: -0.01em;
+  font-style: normal;
+}
+.xt-beam-sub {
+  font-size: 11px;
+  color: var(--fg-dim);
+  opacity: 0.5;
+}
+
+/* ── Scan Line ──────────────────────────────────────────────── */
+@keyframes xt-scan-drift {
+  0%   { transform: translateY(-4px); opacity: 0; }
+  6%   { opacity: 1; }
+  92%  { opacity: 0.85; }
+  100% { transform: translateY(200px); opacity: 0; }
+}
+.comp-demo-area--flush { padding: 0 !important; overflow: hidden; min-height: 0; }
+.xt-scan-surface {
+  width: 100%;
+  height: 200px;
+  background: var(--bg-deep);
+  position: relative;
+  overflow: hidden;
+}
+.xt-scan-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(193,198,163,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(193,198,163,0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.xt-scan-line {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(193,198,163,0.15) 12%,
+    rgba(193,198,163,0.75) 50%,
+    rgba(239,237,227,0.55) 55%,
+    rgba(193,198,163,0.15) 88%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px 1px rgba(193,198,163,0.22);
+  animation: xt-scan-drift 4s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+.xt-scan-labels {
+  position: absolute;
+  bottom: 14px; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 2;
+}
+.xt-scan-code {
+  font-family: 'Fira Code','Cascadia Code','Consolas',monospace;
+  font-size: 10px;
+  color: var(--sage);
+  opacity: 0.4;
+}
+.xt-scan-meta {
+  font-size: 10px;
+  color: var(--fg-dim);
+  opacity: 0.3;
+  letter-spacing: 0.06em;
+  font-family: 'Fira Code','Cascadia Code','Consolas',monospace;
+}
+
+/* ── Reduced motion overrides ───────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .xt-aurora-sweep { animation: none; opacity: 0; }
+  .xt-aurora-dot   { animation: none; }
+  .xt-beam-wrap::before { animation: none; }
+  .xt-scan-line { animation: none; transform: translateY(100px); opacity: 0.5; }
+}
+
+
 /* ---------- Snippets ---------- */
 .snip-stack { display: flex; flex-direction: column; gap: 2px; margin-top: 56px; border: 1px solid var(--divider); border-radius: 20px; overflow: hidden; background: var(--divider); }
 .snip-card { background: var(--bg); display: flex; flex-direction: column; }
@@ -866,6 +1140,385 @@ footer .logo {
 /* ---------- Utility ---------- */
 .assumption { font-size: 12px; color: var(--fg-dim); font-style: italic; margin-top: 14px; }
 .section-note { font-size: 13px; color: var(--fg-dim); margin-top: 12px; }
+
+/* ---------- Animation System ---------- */
+
+/* Keyframes */
+@keyframes xt-fade-up {
+  from { opacity: 0; transform: translateY(28px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+@keyframes xt-fade-in {
+  from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes xt-scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.55); opacity: 0.55; }
+}
+@keyframes bar-draw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes line-draw-h {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+@keyframes line-draw-v {
+  from { transform: scaleY(0); opacity: 0; }
+  to   { transform: scaleY(1); opacity: 1; }
+}
+@keyframes corner-draw {
+  from { width: 0; height: 0; opacity: 0; }
+  to   { width: 20px; height: 20px; opacity: 1; }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(193,198,163,0); }
+  50%       { box-shadow: 0 0 24px 4px rgba(193,198,163,0.18); }
+}
+
+/* ── Scroll reveal base states ─────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1),
+              transform 0.55s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.reveal-fade.visible { opacity: 1; }
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1),
+              transform 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-left.visible { opacity: 1; transform: none; }
+
+/* ── Section header reveal ────────────────────────────────── */
+.section-header-reveal .eyebrow { opacity: 0; transform: translateY(12px); transition: opacity .4s ease-out .0s, transform .4s ease-out .0s; }
+.section-header-reveal .title   { opacity: 0; transform: translateY(16px); transition: opacity .5s ease-out .07s, transform .5s ease-out .07s; }
+.section-header-reveal .lede    { opacity: 0; transform: translateY(14px); transition: opacity .5s ease-out .14s, transform .5s ease-out .14s; }
+.section-header-reveal.visible .eyebrow,
+.section-header-reveal.visible .title,
+.section-header-reveal.visible .lede { opacity: 1; transform: none; }
+
+/* ── Stagger children reveal ───────────────────────────────── */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .45s cubic-bezier(0.16,1,0.3,1),
+              transform .45s cubic-bezier(0.16,1,0.3,1);
+}
+.stagger-children.visible > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children.visible > *:nth-child(2) { transition-delay: 60ms; }
+.stagger-children.visible > *:nth-child(3) { transition-delay: 120ms; }
+.stagger-children.visible > *:nth-child(4) { transition-delay: 180ms; }
+.stagger-children.visible > *:nth-child(5) { transition-delay: 240ms; }
+.stagger-children.visible > *:nth-child(6) { transition-delay: 300ms; }
+.stagger-children.visible > * { opacity: 1; transform: none; }
+
+/* ── Wordmark Hero ─────────────────────────────────────────── */
+.wm-hero-left { cursor: default; }
+.wm-hero-img {
+  transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.wm-hero-left:hover .wm-hero-img {
+  transform: scale(1.04);
+}
+/* Grid overlay on wordmark hero hover */
+.wm-hero-left::before,
+.wm-hero-left::after { transition: width .4s ease-out, height .4s ease-out, opacity .4s ease-out; }
+.wm-hero-left:hover::before,
+.wm-hero-left:hover::after {
+  border-color: rgba(239,237,227,.35);
+}
+
+/* Hero right content: animate pills */
+.wm-hero-pills span {
+  opacity: 0;
+  transform: translateY(8px) scale(0.92);
+  transition: opacity .35s ease-out, transform .35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.wm-hero-pills.visible span:nth-child(1) { opacity:1; transform:none; transition-delay: 0ms; }
+.wm-hero-pills.visible span:nth-child(2) { opacity:1; transform:none; transition-delay: 60ms; }
+.wm-hero-pills.visible span:nth-child(3) { opacity:1; transform:none; transition-delay: 120ms; }
+.wm-hero-pills.visible span:nth-child(4) { opacity:1; transform:none; transition-delay: 180ms; }
+
+/* ── Behaviors cards ───────────────────────────────────────── */
+.wm-bcard {
+  position: relative;
+  isolation: isolate;
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1),
+              box-shadow 0.28s ease;
+  cursor: pointer;
+}
+.wm-bcard:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 1px rgba(193,198,163,0.20),
+    0 16px 40px rgba(0,0,0,0.30),
+    0 0 32px rgba(193,198,163,0.06);
+}
+.wm-bcard-logo {
+  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
+}
+.wm-bcard:hover .wm-bcard-logo {
+  transform: scale(1.1);
+}
+.wm-bcard-stage {
+  overflow: hidden;
+}
+.wm-bcard-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background .25s ease;
+}
+.wm-bcard:hover .wm-bcard-stage::after {
+  background: rgba(255,255,255,.04);
+}
+
+/* ── Letterforms ────────────────────────────────────────────── */
+.lf-cell {
+  cursor: default;
+  transition: background 0.22s ease, transform 0.22s ease;
+}
+.lf-cell:hover {
+  background: var(--card);
+  transform: translateY(-2px);
+}
+.lf-letter {
+  display: block;
+  transition: color 0.25s ease, transform 0.38s cubic-bezier(0.34,1.56,0.64,1);
+}
+.lf-cell:hover .lf-letter {
+  color: var(--accent-fg);
+  transform: scale(1.1) translateY(-3px);
+}
+.lf-label {
+  transition: color 0.22s ease;
+}
+.lf-cell:hover .lf-label {
+  color: var(--fg);
+}
+
+/* ── Construction block ─────────────────────────────────────── */
+.wm-const-logo {
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.4s ease;
+}
+.wm-const-left:hover .wm-const-logo {
+  transform: scale(1.04);
+}
+
+/* Blueprint grid on construction logo hover */
+.wm-const-logo-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.wm-const-logo-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(193,198,163,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(193,198,163,.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.wm-const-left:hover .wm-const-logo-wrap::before {
+  opacity: 1;
+}
+
+/* Construction rules stagger (JS-driven via .visible) */
+.wm-const-rule {
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+.wm-const-rule.rule-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── BIU cards ──────────────────────────────────────────────── */
+.biu-card {
+  isolation: isolate;
+  transition: transform 0.32s cubic-bezier(0.16,1,0.3,1),
+              box-shadow 0.32s ease;
+}
+.biu-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 0 1px rgba(193,198,163,0.15),
+    0 20px 48px rgba(0,0,0,0.24),
+    0 0 28px rgba(193,198,163,0.05);
+  z-index: 2;
+}
+.biu-mock-wrap {
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.biu-card:hover .biu-mock-wrap {
+  transform: translateY(-4px) scale(1.015);
+}
+/* Business card tilt */
+.mockup-biz {
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1),
+              box-shadow 0.4s ease;
+}
+.biu-card:hover .mockup-biz {
+  transform: perspective(600px) rotateX(3deg) rotateY(-4deg);
+  box-shadow: 8px 16px 32px rgba(0,0,0,.3);
+}
+/* Presentation slide */
+.mockup-slide {
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.biu-card:hover .mockup-slide {
+  transform: perspective(800px) rotateX(2deg);
+}
+/* Category dot pulse */
+.biu-cat-dot {
+  animation: dot-pulse 2.8s ease-in-out infinite;
+}
+
+/* ── Motion cards ────────────────────────────────────────────── */
+.motion-card {
+  position: relative;
+  isolation: isolate;
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1),
+              box-shadow 0.28s ease;
+}
+.motion-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(193,198,163,0.15),
+    0 12px 32px rgba(0,0,0,0.22),
+    0 0 24px rgba(193,198,163,0.04);
+}
+.motion-replay {
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease,
+              box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.motion-replay:hover {
+  background: var(--accent-fg);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(53,0,4,0.35);
+}
+.motion-replay:active {
+  transform: scale(0.95);
+}
+/* Timing bars: start at 0, animate when visible */
+.timing-bar-fill {
+  transform-origin: left center;
+  transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+}
+/* Stage glow on hover */
+.motion-stage {
+  transition: box-shadow 0.3s ease;
+}
+.motion-card:hover .motion-stage {
+  box-shadow:
+    inset 0 0 60px rgba(53,0,4,0.22),
+    inset 0 0 20px rgba(193,198,163,0.05);
+}
+
+/* ── Stats strip count-up ────────────────────────────────────── */
+.stat .n {
+  transition: color 0.3s ease;
+}
+.stats-strip:hover .stat .n {
+  color: var(--accent-fg);
+}
+.stat {
+  transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
+}
+.stats-strip:hover .stat:hover {
+  transform: translateY(-3px);
+}
+
+/* ── Nash-style Atmospheric Card Effects ───────────────────────
+   Mouse-following spotlight + aurora mesh + glowing borders
+   ──────────────────────────────────────────────────────────── */
+
+/* CSS custom props for cursor position (JS writes these) */
+.wm-bcard,
+.biu-card,
+.motion-card { --mx: 50%; --my: 50%; }
+
+/* Cursor-following soft radial glow on every interactive card */
+.wm-bcard::before,
+.biu-card::before,
+.motion-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle 240px at var(--mx) var(--my),
+    rgba(193,198,163,0.11) 0%,
+    transparent 65%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.wm-bcard:hover::before,
+.biu-card:hover::before,
+.motion-card:hover::before { opacity: 1; }
+
+/* Aurora gradient mesh in behavior card preview stages */
+.wm-bcard-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse 80% 70% at 10% 15%,  rgba(80,0,8,0.55),       transparent 65%),
+    radial-gradient(ellipse 60% 65% at 88% 88%,  rgba(193,198,163,0.10),  transparent 65%),
+    radial-gradient(ellipse 55% 40% at 55%  5%,  rgba(0,30,52,0.45),      transparent 65%);
+}
+
+/* Logo sits above the aurora layer */
+.wm-bcard-logo { position: relative; z-index: 1; }
+
+/* ── Reduced motion override ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-fade, .reveal-left,
+  .section-header-reveal .eyebrow,
+  .section-header-reveal .title,
+  .section-header-reveal .lede,
+  .stagger-children > *,
+  .wm-hero-pills span,
+  .wm-const-rule {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .biu-cat-dot { animation: none; }
+  .timing-bar-fill { transition: none !important; }
+  .wm-bcard::before,
+  .biu-card::before,
+  .motion-card::before { display: none; }
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 980px) {
