@@ -775,7 +775,12 @@
         <!-- Entrance -->
         <div class="motion-card">
           <div class="motion-stage" id="stage-entrance">
-            <div class="motion-logo" id="obj-entrance"></div>
+            <video class="motion-vid vid-dark" autoplay loop muted playsinline preload="auto">
+              <source src="aseets/xtopia%20logo%20animation/XTOPIA%20Logo%20Animation%20%28Dark%29.mp4" type="video/mp4">
+            </video>
+            <video class="motion-vid vid-light" loop muted playsinline preload="auto">
+              <source src="aseets/xtopia%20logo%20animation/XTOPIA%20Logo%20Animation.mp4" type="video/mp4">
+            </video>
             <div class="motion-pgbar" id="bar-entrance"></div>
           </div>
           <div class="motion-card-body">
@@ -788,14 +793,19 @@
             </div>
             <p class="motion-card-desc">Content arrives from below with ease-out. Used for sections loading into view, cards revealing on scroll, and modal content appearing.</p>
             <div class="motion-card-code"><code>translateY(28px → 0) · blur(5px → 0) · opacity(0 → 1)</code></div>
-            <button class="motion-replay" onclick="replayAnim('entrance')">↺ Replay</button>
+            <button class="motion-replay" onclick="replayMotionVid('entrance')">↺ Replay</button>
           </div>
         </div>
 
         <!-- Emphasis -->
         <div class="motion-card">
           <div class="motion-stage" id="stage-emphasis">
-            <div class="motion-logo" id="obj-emphasis"></div>
+            <video class="motion-vid vid-dark" autoplay loop muted playsinline preload="auto">
+              <source src="aseets/xtopia%20logo%20animation/XTOPIA%20Logo%20Animation%202dark.mp4" type="video/mp4">
+            </video>
+            <video class="motion-vid vid-light" loop muted playsinline preload="auto">
+              <source src="aseets/xtopia%20logo%20animation/XTOPIA%20Logo%20Animation%202light.mp4" type="video/mp4">
+            </video>
             <div class="motion-pgbar" id="bar-emphasis"></div>
           </div>
           <div class="motion-card-body">
@@ -808,14 +818,19 @@
             </div>
             <p class="motion-card-desc">A spring scale-in with overshoot. Used for hero reveals, key stats appearing, and primary CTA buttons on interaction.</p>
             <div class="motion-card-code"><code>scale(0.55 → 1.14 → 1) · blur(5px → 0) · spring curve</code></div>
-            <button class="motion-replay" onclick="replayAnim('emphasis')">↺ Replay</button>
+            <button class="motion-replay" onclick="replayMotionVid('emphasis')">↺ Replay</button>
           </div>
         </div>
 
         <!-- Transition -->
         <div class="motion-card">
           <div class="motion-stage" id="stage-transition">
-            <div class="motion-logo" id="obj-transition"></div>
+            <video class="motion-vid vid-dark" autoplay loop muted playsinline preload="auto">
+              <source src="aseets/xtopia%20logo%20animation/XTOPIA%20Logo%20Animation%203dark.mp4" type="video/mp4">
+            </video>
+            <video class="motion-vid vid-light" loop muted playsinline preload="auto">
+              <source src="aseets/xtopia%20logo%20animation/XTOPIA%20Logo%20Animation%203light.mp4" type="video/mp4">
+            </video>
             <div class="motion-pgbar" id="bar-transition"></div>
           </div>
           <div class="motion-card-body">
@@ -828,7 +843,7 @@
             </div>
             <p class="motion-card-desc">A directional slide for navigation and content switching. Entering from the left signals forward; from the right signals return.</p>
             <div class="motion-card-code"><code>translateX(-48px → 0) · blur(3px → 0) · opacity(0 → 1)</code></div>
-            <button class="motion-replay" onclick="replayAnim('transition')">↺ Replay</button>
+            <button class="motion-replay" onclick="replayMotionVid('transition')">↺ Replay</button>
           </div>
         </div>
       </div>

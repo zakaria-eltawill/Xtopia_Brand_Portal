@@ -513,6 +513,29 @@ html[data-theme="light"] .vb-subs--adaptive .vb-sub-logos img { filter: brightne
 .motion-pgbar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; z-index: 3;
   background: linear-gradient(90deg, var(--accent-fg) 0%, rgba(255,106,114,.3) 100%); }
 
+/* ── Motion video players ──────────────────────────────────── */
+.motion-vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+}
+/* Dark mode (default): dark videos visible, light videos hidden */
+.vid-dark  { opacity: 1; }
+.vid-light { opacity: 0; pointer-events: none; }
+/* Light mode: swap */
+html[data-theme="light"] .vid-dark  { opacity: 0; pointer-events: none; }
+html[data-theme="light"] .vid-light { opacity: 1; }
+/* Light mode: update stage bg to match cream video background */
+html[data-theme="light"] .motion-stage {
+  background: #EFEDE3;
+}
+html[data-theme="light"] .motion-stage::before { opacity: 0; }
+html[data-theme="light"] .motion-stage::after  { opacity: 0; }
+
 /* Card body */
 .motion-card-body { padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 12px; flex: 1; border-top: 1px solid var(--divider); }
 .motion-card-top { display: flex; flex-direction: column; gap: 8px; }

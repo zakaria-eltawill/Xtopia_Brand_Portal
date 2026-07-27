@@ -8,6 +8,22 @@ function toggleTheme() {
   html.setAttribute('data-theme', isLight ? 'dark' : 'light');
   document.getElementById('tt-dark').innerHTML  = isLight ? '<b>Dark</b>' : 'Dark';
   document.getElementById('tt-light').innerHTML = isLight ? 'Light' : '<b>Light</b>';
+  /* Switch motion videos between dark/light versions */
+  const goingLight = !isLight;
+  document.querySelectorAll('.vid-dark').forEach(v => {
+    if (goingLight) { v.pause(); } else { v.currentTime = 0; v.play(); }
+  });
+  document.querySelectorAll('.vid-light').forEach(v => {
+    if (goingLight) { v.currentTime = 0; v.play(); } else { v.pause(); }
+  });
+}
+
+function replayMotionVid(name) {
+  const stage = document.getElementById('stage-' + name);
+  if (!stage) return;
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const vid = stage.querySelector(isLight ? '.vid-light' : '.vid-dark');
+  if (vid) { vid.currentTime = 0; vid.play(); }
 }
 
 /* Active nav highlight on scroll */
