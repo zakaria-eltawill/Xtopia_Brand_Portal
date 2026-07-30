@@ -160,7 +160,7 @@ document.querySelector('.menu-btn')?.addEventListener('click', () => {
 
   /* ── 9. Nash-style spotlight: cursor → --mx / --my per card ── */
   if (!reducedMotion) {
-    const spotCards = document.querySelectorAll('.wm-bcard, .biu-card, .motion-card');
+    const spotCards = document.querySelectorAll('.wm-bcard, .biu-card, .motion-card, .illus-item');
     spotCards.forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
