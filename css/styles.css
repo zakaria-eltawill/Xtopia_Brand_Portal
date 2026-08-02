@@ -1287,34 +1287,46 @@ html[data-theme="light"] .sh-cmt  { color: rgba(0,38,62,.3); }
   letter-spacing: .14em; text-transform: uppercase;
 }
 
-/* Hover action overlay */
+/* Action layer — a sibling of the preview, positioned per view mode */
 .dl-actions {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  gap: 8px; background: rgba(0,23,36,.82); backdrop-filter: blur(3px);
-  opacity: 0; transition: opacity .28s var(--ease-out); z-index: 2;
+  display: flex; align-items: center; justify-content: center; gap: 7px; z-index: 2;
 }
-.dl-card:hover .dl-actions,
-.dl-card:focus-within .dl-actions { opacity: 1; }
+
+/* Grid: scrim over the preview box only, revealed on hover/focus.
+   `inset` fixes the width and the aspect-ratio derives a height that
+   matches .dl-preview exactly, so the info row stays readable. */
+.dl-items[data-view="grid"] .dl-actions {
+  position: absolute; inset: 0 0 auto 0; aspect-ratio: 4/3;
+  background: linear-gradient(to top, rgba(0,23,36,.93), rgba(0,23,36,.78));
+  backdrop-filter: blur(2px);
+  opacity: 0; transition: opacity .28s var(--ease-out);
+}
+.dl-items[data-view="grid"] .dl-card:hover .dl-actions,
+.dl-items[data-view="grid"] .dl-card:focus-within .dl-actions { opacity: 1; }
+
 .dl-act {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   border: 1px solid rgba(239,237,227,.22); background: rgba(239,237,227,.07);
   color: var(--cream); border-radius: var(--radius-pill); cursor: pointer;
   font-family: inherit; font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
-  padding: 8px 13px; transition: background .2s, border-color .2s, transform .2s var(--ease-spring);
-  transform: translateY(5px);
+  padding: 0 14px; height: 32px; white-space: nowrap; text-decoration: none;
+  transition: background .2s, border-color .2s, transform .25s var(--ease-spring);
 }
-.dl-card:hover .dl-act,
-.dl-card:focus-within .dl-act { transform: none; }
+.dl-act svg { width: 13px; height: 13px; stroke-width: 2; flex: none; }
 .dl-act:hover { background: rgba(239,237,227,.16); border-color: rgba(239,237,227,.4); }
-.dl-act svg { width: 13px; height: 13px; stroke-width: 2; }
+.dl-act:focus-visible { outline: 2px solid var(--accent-fg); outline-offset: 2px; }
 .dl-act--primary {
   background: var(--accent-fg); border-color: var(--accent-fg); color: #2A0004; font-weight: 600;
 }
 .dl-act--primary:hover { background: #ff838a; border-color: #ff838a; }
-.dl-act--icon { padding: 8px; }
-/* Stagger the action buttons in */
-.dl-card:hover .dl-act:nth-child(2) { transition-delay: .04s; }
-.dl-card:hover .dl-act:nth-child(3) { transition-delay: .08s; }
+.dl-act--icon { padding: 0; width: 32px; flex: none; }
+
+/* Grid only: lift the buttons in behind the scrim, lightly staggered */
+.dl-items[data-view="grid"] .dl-act { transform: translateY(6px); }
+.dl-items[data-view="grid"] .dl-card:hover .dl-act,
+.dl-items[data-view="grid"] .dl-card:focus-within .dl-act { transform: none; }
+.dl-items[data-view="grid"] .dl-card:hover .dl-act:nth-child(2) { transition-delay: .04s; }
+.dl-items[data-view="grid"] .dl-card:hover .dl-act:nth-child(3) { transition-delay: .08s; }
 
 /* Card info */
 .dl-info {
@@ -1342,18 +1354,29 @@ html[data-theme="light"] .sh-cmt  { color: rgba(0,38,62,.3); }
   border: 1px solid rgba(193,198,163,.28); border-radius: var(--radius-sm); padding: 2px 7px;
 }
 
-/* ── List view overrides ── */
-.dl-items[data-view="list"] .dl-card { flex-direction: row; align-items: stretch; border-radius: var(--radius-md); }
-.dl-items[data-view="list"] .dl-preview { aspect-ratio: auto; width: 96px; flex: none; padding: 12px; }
-.dl-items[data-view="list"] .dl-actions { position: static; opacity: 1; background: none; backdrop-filter: none; padding: 0 14px; gap: 6px; flex: none; }
-.dl-items[data-view="list"] .dl-act { transform: none; }
+/* ── List view ── row reads: thumbnail · name + meta · actions ── */
+.dl-items[data-view="list"] .dl-card {
+  flex-direction: row; align-items: stretch; border-radius: var(--radius-md);
+}
+.dl-items[data-view="list"] .dl-preview {
+  order: 1; aspect-ratio: auto; width: 88px; flex: none; padding: 10px;
+}
 .dl-items[data-view="list"] .dl-info {
+  order: 2; flex: 1; min-width: 0;
   border-top: none; border-left: 1px solid var(--divider);
-  flex-direction: row; align-items: center; gap: 16px; justify-content: space-between;
+  flex-direction: row; align-items: center; gap: 18px; justify-content: space-between;
+}
+.dl-items[data-view="list"] .dl-actions {
+  order: 3; flex: none; padding: 0 14px 0 4px; background: var(--bg);
 }
 .dl-items[data-view="list"] .dl-name { flex: 1; }
-.dl-items[data-view="list"] .dl-meta { margin-top: 0; }
+.dl-items[data-view="list"] .dl-meta { margin-top: 0; flex: none; }
 .dl-items[data-view="list"] .dl-card:hover .dl-preview img { transform: none; }
+.dl-items[data-view="list"] .dl-card:hover { background: var(--card); }
+/* Secondary actions stay quiet until the row is engaged */
+.dl-items[data-view="list"] .dl-act--icon { opacity: .55; transition: opacity .2s, background .2s, border-color .2s; }
+.dl-items[data-view="list"] .dl-card:hover .dl-act--icon,
+.dl-items[data-view="list"] .dl-card:focus-within .dl-act--icon { opacity: 1; }
 
 /* ── Empty state ── */
 .dl-empty { text-align: center; padding: 80px 20px; display: none; }
@@ -1444,16 +1467,17 @@ html[data-theme="light"] .dl-modal-bg { background: rgba(0,23,36,.55); }
   .dl-items[data-view="grid"] { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Touch devices have no hover — keep actions permanently visible */
+/* Touch devices have no hover — drop the scrim and sit the actions
+   below the preview so artwork is never covered. */
 @media (hover: none) {
-  .dl-actions {
-    opacity: 1; position: static; background: none; backdrop-filter: none;
-    padding: 10px 12px 0; gap: 6px;
+  .dl-items[data-view="grid"] .dl-actions {
+    position: static; aspect-ratio: auto; opacity: 1;
+    background: none; backdrop-filter: none;
+    padding: 11px 13px 0; justify-content: flex-start;
   }
-  .dl-act { transform: none; }
-  .dl-act span { display: none; }
-  .dl-act { padding: 8px 10px; }
-  .dl-card .dl-preview img { transform: none !important; }
+  .dl-items[data-view="grid"] .dl-act { transform: none; }
+  .dl-items[data-view="list"] .dl-act--icon { opacity: 1; }
+  .dl-card:hover .dl-preview img { transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2105,9 +2129,15 @@ html[data-theme="light"] .illus-overlay {
   .dl-cat-desc { display: none; }
   .dl-modal { padding: 12px; }
   .dl-modal-acts { margin-left: 0; width: 100%; }
-  /* List view stacks its action bar below the info row */
-  .dl-items[data-view="list"] .dl-card { flex-wrap: wrap; }
-  .dl-items[data-view="list"] .dl-info { flex-direction: column; align-items: flex-start; gap: 7px; }
+  /* List rows go compact: name stacks over meta, and all three actions
+     collapse to icons so the filename keeps the width it deserves. */
+  .dl-items[data-view="list"] .dl-info {
+    flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 14px;
+  }
+  .dl-items[data-view="list"] .dl-actions { padding: 0 10px 0 2px; gap: 6px; }
+  .dl-items[data-view="list"] .dl-act--primary { width: 32px; padding: 0; }
+  .dl-items[data-view="list"] .dl-act--primary span { display: none; }
+  .dl-items[data-view="list"] .dl-act--icon { opacity: 1; }
 
   .illus-grid {
     grid-template-columns: 1fr;

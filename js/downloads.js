@@ -81,27 +81,29 @@
         ? '<img src="' + encodeURI(a.p) + '" alt="' + esc(a.n) + '" loading="lazy" decoding="async">'
         : '<div class="dl-glyph">' + ICONS.file + '<span>' + esc(a.e) + '</span></div>';
 
-      /* Request-only assets get a mailto action instead of a download link. */
+      /* Only the primary action carries a label — the two secondary actions are
+         icon-only so three controls fit inside a grid card without overflowing. */
       const actions = a.req
         ? '<a class="dl-act dl-act--primary" href="mailto:brand@xtopia.life?subject=' +
             encodeURIComponent('Asset request — ' + a.n) +
             '" aria-label="Request ' + esc(a.n) + ' by email">' + ICONS.mail + '<span>Request</span></a>'
         : (a.prev
-            ? '<button class="dl-act" type="button" data-preview aria-label="Preview ' + esc(a.n) + '">' +
-                ICONS.eye + '<span>Preview</span></button>'
+            ? '<button class="dl-act dl-act--icon" type="button" data-preview title="Preview"' +
+                ' aria-label="Preview ' + esc(a.n) + '">' + ICONS.eye + '</button>'
             : '') +
           '<a class="dl-act dl-act--primary" href="' + encodeURI(a.p) + '" download data-dl' +
             ' aria-label="Download ' + esc(a.n) + '">' + ICONS.dl + '<span>Download</span></a>' +
-          '<button class="dl-act dl-act--icon" type="button" data-copy aria-label="Copy link to ' +
-            esc(a.n) + '">' + ICONS.link + '</button>';
+          '<button class="dl-act dl-act--icon" type="button" data-copy title="Copy link"' +
+            ' aria-label="Copy link to ' + esc(a.n) + '">' + ICONS.link + '</button>';
 
       const dims = a.w ? '<span class="dl-dot">·</span>' + a.w + '×' + a.h : '';
       const flag = a.req ? '<span class="dl-req">On request</span>' : '';
 
+      /* Actions are a sibling of the preview — not a child — so list view can
+         place them at the end of the row instead of inside the thumbnail. */
       card.innerHTML =
-        '<div class="dl-preview dl-preview--' + surface(a) + '">' + media +
-          '<div class="dl-actions">' + actions + '</div>' +
-        '</div>' +
+        '<div class="dl-preview dl-preview--' + surface(a) + '">' + media + '</div>' +
+        '<div class="dl-actions">' + actions + '</div>' +
         '<div class="dl-info">' +
           '<span class="dl-name">' + esc(a.n) + '</span>' +
           '<span class="dl-meta">' +
