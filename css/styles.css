@@ -141,14 +141,36 @@ img { max-width: 100%; display: block; }
 .sidebar nav a span { opacity: .5; margin-right: 6px; font-family: 'Barques','Syne',sans-serif; }
 
 /* ---------- Theme Toggle ---------- */
-.theme-toggle {
+/* Fixed top-right cluster: downloads jump + theme toggle */
+.top-actions {
   position: fixed; top: 24px; right: 32px; z-index: 60;
+  display: flex; gap: 10px; align-items: center;
+}
+.theme-toggle {
   display: flex; gap: 10px; align-items: center;
   font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
   background: var(--bg-deep); border: 1px solid var(--divider);
-  padding: 8px 14px; border-radius: 999px; cursor: pointer; color: var(--fg-dim);
+  padding: 0 14px; height: 36px; box-sizing: border-box;
+  border-radius: 999px; cursor: pointer; color: var(--fg-dim);
 }
 .theme-toggle b { color: var(--fg); }
+
+.dl-jump {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+  background: var(--bg-deep); border: 1px solid var(--divider);
+  padding: 0 16px; height: 36px; box-sizing: border-box;
+  border-radius: 999px; cursor: pointer;
+  color: var(--fg-dim); text-decoration: none; white-space: nowrap;
+  transition: color .2s var(--ease-out), border-color .2s var(--ease-out),
+              background .2s var(--ease-out);
+}
+.dl-jump svg { width: 14px; height: 14px; stroke-width: 2; color: var(--accent-fg); transition: transform .25s var(--ease-spring); }
+.dl-jump:hover {
+  color: var(--fg); border-color: rgba(255,106,114,.42); background: rgba(255,106,114,.07);
+}
+.dl-jump:hover svg { transform: translateY(2px); }
+.dl-jump:focus-visible { outline: 2px solid var(--accent-fg); outline-offset: 2px; }
 .menu-btn { display: none; }
 
 /* ---------- Main ---------- */
@@ -2088,7 +2110,7 @@ html[data-theme="light"] .illus-overlay {
     background: var(--bg-deep); border: 1px solid var(--divider); border-radius: 999px;
     width: 44px; height: 44px; align-items: center; justify-content: center; cursor: pointer;
   }
-  .theme-toggle { right: 20px; top: 24px; }
+  .top-actions { right: 20px; top: 24px; gap: 8px; }
   .hero-inner { padding: 0 24px 56px; }
   .scroll-cue { right: 24px; }
   .motion-timing { grid-template-columns: 1fr; }
@@ -2120,6 +2142,10 @@ html[data-theme="light"] .illus-overlay {
 }
 
 @media (max-width: 560px) {
+  /* Collapse the jump link to its icon so it clears the menu button */
+  .dl-jump span { display: none; }
+  .dl-jump { padding: 0 11px; }
+
   /* Downloads — mobile: single column */
   .dl-items[data-view="grid"] { grid-template-columns: 1fr; }
   .dl-stats { grid-template-columns: 1fr 1fr; }
