@@ -1412,61 +1412,71 @@
     <section class="section" id="downloads">
       <div class="eyebrow">16 — Assets</div>
       <h2 class="title">Downloads</h2>
-      <p class="lede">All primary brand lockups available for direct download. Request EPS vector, alternate formats, or co-marketing variations from <strong>brand@xtopia.life</strong></p>
+      <p class="lede">Browse and download official XTOPIA logos, sub-brand marks, partner lockups and print-ready templates. Need EPS vector, alternate formats or co-marketing variations? Write to <strong>brand@xtopia.life</strong></p>
 
-      <div class="dl-wrapper">
-
-        <!-- Core Brand group -->
-        <div class="dl-group-header">
-          <span class="dl-group-label">Core Brand</span>
-          <span class="dl-group-count">3 assets</span>
+      <!-- Library statistics -->
+      <div class="dl-stats reveal">
+        <div class="dl-stat">
+          <div class="dl-stat-n" id="dl-n-assets">—</div>
+          <div class="dl-stat-l">Total assets</div>
         </div>
-        <div class="dl-asset-grid">
+        <div class="dl-stat">
+          <div class="dl-stat-n" id="dl-n-cats">—</div>
+          <div class="dl-stat-l">Categories</div>
+        </div>
+        <div class="dl-stat">
+          <div class="dl-stat-n" id="dl-n-fmts">—</div>
+          <div class="dl-stat-l">File formats</div>
+        </div>
+        <div class="dl-stat">
+          <div class="dl-stat-n" id="dl-n-size">—</div>
+          <div class="dl-stat-l">Library size</div>
+        </div>
+      </div>
 
-          <a class="dl-card" href="aseets/images/logos/brand/logo-xtopia-wordmark-white-outline.png" download="xtopia-wordmark-white-outline.png">
-            <div class="dl-preview dl-preview--dark">
-              <img src="aseets/images/logos/brand/logo-xtopia-wordmark-white-outline.png" alt="XTOPIA wordmark white">
-              <div class="dl-overlay">
-                <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13M6 11l6 6 6-6"/><path d="M3 21h18"/></svg>
-                <span>Download</span>
-              </div>
-            </div>
-            <div class="dl-info">
-              <span class="dl-name">Wordmark — white outline</span>
-              <span class="dl-fmt">PNG</span>
-            </div>
-          </a>
+      <!-- Sticky toolbar: search · sort · view -->
+      <div class="dl-toolbar">
+        <div class="dl-bar">
+          <div class="dl-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="dl-search" type="search" autocomplete="off" placeholder="Search assets by name, format or category…" aria-label="Search assets">
+            <button class="dl-search-clear" id="dl-search-clear" type="button" aria-label="Clear search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
 
-          <a class="dl-card" href="aseets/images/logos/brand/logo-xtopia-wordmark-black.png" download="xtopia-wordmark-black.png">
-            <div class="dl-preview dl-preview--light">
-              <img src="aseets/images/logos/brand/logo-xtopia-wordmark-black.png" alt="XTOPIA wordmark black">
-              <div class="dl-overlay dl-overlay--light">
-                <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13M6 11l6 6 6-6"/><path d="M3 21h18"/></svg>
-                <span>Download</span>
-              </div>
-            </div>
-            <div class="dl-info">
-              <span class="dl-name">Wordmark — black</span>
-              <span class="dl-fmt">PNG</span>
-            </div>
-          </a>
+          <div class="dl-ctrls">
+            <select class="dl-select" id="dl-sort" aria-label="Sort assets">
+              <option value="az">Alphabetical</option>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="largest">Largest first</option>
+              <option value="smallest">Smallest first</option>
+            </select>
 
-          <a class="dl-card" href="aseets/images/logos/brand/logo-xtopia-developments-white.png" download="xtopia-developments-white.png">
-            <div class="dl-preview dl-preview--dark">
-              <img src="aseets/images/logos/brand/logo-xtopia-developments-white.png" alt="XTOPIA Developments">
-              <div class="dl-overlay">
-                <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13M6 11l6 6 6-6"/><path d="M3 21h18"/></svg>
-                <span>Download</span>
-              </div>
+            <div class="dl-views" role="group" aria-label="View mode">
+              <button class="dl-view-btn" type="button" data-v="grid" aria-pressed="true" aria-label="Grid view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              </button>
+              <button class="dl-view-btn" type="button" data-v="list" aria-pressed="false" aria-label="List view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>
+              </button>
             </div>
-            <div class="dl-info">
-              <span class="dl-name">Developments sub-brand — white</span>
-              <span class="dl-fmt">PNG</span>
-            </div>
-          </a>
-
+          </div>
         </div>
 
+        <!-- Filters are generated from the asset data -->
+        <div class="dl-chips" id="dl-chips" role="group" aria-label="Filter assets"></div>
+      </div>
+
+      <!-- Categories render here -->
+      <div id="dl-root"></div>
+
+      <div class="dl-empty" id="dl-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8.5 11h5"/></svg>
+        <div class="dl-empty-t">No matching assets found.</div>
+        <div class="dl-empty-s">Try a different search term, or clear the active filters.</div>
+        <button type="button" id="dl-reset">Clear filters</button>
       </div>
     </section>
 
@@ -1480,7 +1490,40 @@
   </main>
 </div>
 
+<!-- Downloads: preview modal -->
+<div class="dl-modal" id="dl-modal" role="dialog" aria-modal="true" aria-labelledby="dl-modal-name">
+  <div class="dl-modal-bg"></div>
+  <div class="dl-modal-box">
+    <button class="dl-modal-close" type="button" aria-label="Close preview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="dl-modal-stage">
+      <img src="" alt="">
+    </div>
+    <div class="dl-modal-foot">
+      <div>
+        <div class="dl-modal-name" id="dl-modal-name"></div>
+        <div class="dl-modal-meta"></div>
+      </div>
+      <div class="dl-modal-acts">
+        <a class="dl-act dl-act--primary" href="#" download data-modal-dl>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></svg>
+          <span>Download</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Downloads: toast -->
+<div class="dl-toast" id="dl-toast" role="status" aria-live="polite">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>
+  <span></span>
+</div>
+
 <script src="js/main.js"></script>
+<script src="js/downloads-data.js"></script>
+<script src="js/downloads.js"></script>
 <script>
   // Motion demo replay
   const animMap = {
