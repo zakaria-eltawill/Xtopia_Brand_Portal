@@ -1,2 +1,12 @@
 .DS_Store
 Thumbs.db
+
+# Oversized brand documents — exceed GitHub's 100MB per-file limit and would
+# push the repo past the 1GB GitHub Pages limit.
+# Kept locally; distributed on request via brand@xtopia.life
+*.indd
+*.idml
+*.pptx
+aseets/XTOIPA_FILES/XTOPIA Brand identity_Folder/XTOPIA Brand identity.pdf
+aseets/XTOIPA_FILES/XTOPIA Brand Guideline Folder/Xtopia Brand Guideline.pdf
+aseets/XTOIPA_FILES/XTOPIA Company Profile/XTOPIA Company Profile .pdf
