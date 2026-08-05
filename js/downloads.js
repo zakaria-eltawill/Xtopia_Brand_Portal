@@ -129,7 +129,7 @@
 
       nodes.push({
         el: card, cat: block, a,
-        hay: (a.n + ' ' + a.e + ' ' + a.c + ' ' + a.p).toLowerCase(),
+        hay: (a.n + ' ' + a.e + ' ' + a.c + ' ' + (a.p || '')).toLowerCase(),
       });
     });
 
