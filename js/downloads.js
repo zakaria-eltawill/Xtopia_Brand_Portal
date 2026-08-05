@@ -49,6 +49,7 @@
     mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 6.5L21 6"/></svg>',
     file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/></svg>',
     x:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+    ext:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>',
     ok:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>',
     empty:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8.5 11h5"/></svg>',
   };
@@ -83,7 +84,15 @@
 
       /* Only the primary action carries a label — the two secondary actions are
          icon-only so three controls fit inside a grid card without overflowing. */
-      const actions = a.req
+      const actions = (a.req && a.drive)
+        /* Too large to host directly — the primary action opens the file's
+           Google Drive folder in a new tab; email stays as a fallback. */
+        ? '<a class="dl-act dl-act--primary" href="' + esc(a.drive) + '" target="_blank" rel="noopener"' +
+            ' aria-label="Open ' + esc(a.n) + ' in Google Drive">' + ICONS.ext + '<span>Open in Drive</span></a>' +
+          '<a class="dl-act dl-act--icon" href="mailto:brand@xtopia.life?subject=' +
+            encodeURIComponent('Asset request — ' + a.n) +
+            '" title="Request via email" aria-label="Request ' + esc(a.n) + ' by email">' + ICONS.mail + '</a>'
+        : a.req
         ? '<a class="dl-act dl-act--primary" href="mailto:brand@xtopia.life?subject=' +
             encodeURIComponent('Asset request — ' + a.n) +
             '" aria-label="Request ' + esc(a.n) + ' by email">' + ICONS.mail + '<span>Request</span></a>'
@@ -97,7 +106,9 @@
             ' aria-label="Copy link to ' + esc(a.n) + '">' + ICONS.link + '</button>';
 
       const dims = a.w ? '<span class="dl-dot">·</span>' + a.w + '×' + a.h : '';
-      const flag = a.req ? '<span class="dl-req">On request</span>' : '';
+      const flag = a.req
+        ? '<span class="dl-req">' + (a.drive ? 'Google Drive' : 'On request') + '</span>'
+        : '';
 
       /* Actions are a sibling of the preview — not a child — so list view can
          place them at the end of the row instead of inside the thumbnail. */
