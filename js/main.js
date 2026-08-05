@@ -113,19 +113,6 @@ document.querySelector('.menu-btn')?.addEventListener('click', () => {
   const timingSection = document.querySelector('.motion-timing');
   if (timingSection) barsObs.observe(timingSection);
 
-  /* ── 5. Stats strip: count-up animation ── */
-  const statsObs = new IntersectionObserver((entries) => {
-    if (!entries[0].isIntersecting) return;
-    document.querySelectorAll('.stat .n').forEach((el, i) => {
-      setTimeout(() => {
-        el.style.animation = 'xt-scale-in .5s cubic-bezier(0.34,1.56,0.64,1) both';
-      }, i * 60);
-    });
-    statsObs.disconnect();
-  }, { threshold: 0.4 });
-  const statsStrip = document.querySelector('.stats-strip');
-  if (statsStrip) statsObs.observe(statsStrip);
-
   /* ── 6. BIU card subtle tilt on mousemove ── */
   document.querySelectorAll('.biu-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
