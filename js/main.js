@@ -73,9 +73,32 @@ document.querySelector('.menu-btn')?.addEventListener('click', () => {
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-  document.querySelectorAll(
+  const revealTargets = document.querySelectorAll(
     '.reveal, .reveal-fade, .reveal-left, .stagger-children, .section-header-reveal, .wm-hero-pills'
-  ).forEach(el => revealObs.observe(el));
+  );
+  revealTargets.forEach(el => revealObs.observe(el));
+
+  /* Safety net: sections whose content loads asynchronously (Downloads
+     renders 50+ cards after this observer already attached) can grow
+     tall enough, or shift enough, that the one-shot IntersectionObserver
+     callback is missed — landing on a hash link or a fast programmatic
+     scroll are the common triggers. Without this, the eyebrow/title/lede
+     stay at opacity:0 forever, since nothing else ever retries. This
+     force-reveals anything already on-screen, independent of whether
+     the primary observer fired. */
+  function forceRevealOnScreen() {
+    revealTargets.forEach(el => {
+      if (el.classList.contains('visible')) return;
+      const r = el.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) {
+        el.classList.add('visible');
+      }
+    });
+  }
+  window.addEventListener('load', forceRevealOnScreen);
+  window.addEventListener('hashchange', () => setTimeout(forceRevealOnScreen, 350));
+  window.addEventListener('scroll', forceRevealOnScreen, { passive: true });
+  forceRevealOnScreen();
 
   /* ── 3. Construction rules staggered slide-in ── */
   const constRulesWrap = document.querySelector('.wm-const-rules');
