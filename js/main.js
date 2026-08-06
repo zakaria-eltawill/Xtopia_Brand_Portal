@@ -137,19 +137,22 @@ function xtCopyText(text, onDone) {
   });
 })();
 
-/* ── Brand in Use: hover preview of the full, uncropped photo ──
-   The grid crops every thumbnail to a fixed row height, so hovering
-   (or focusing, for keyboard users) opens a centered panel showing
-   the source image at its real proportions via object-fit:contain. */
+/* ── Brand in Use: click-to-preview the full, uncropped photo ──
+   The grid crops every thumbnail to a fixed row height, so a few
+   source images genuinely lose content at grid scale. The eye-icon
+   button that appears on hover opens a modal showing the source
+   image at its real proportions via object-fit:contain. */
 (function () {
   const preview = document.getElementById('biu-preview');
   if (!preview) return;
-  const frame   = preview.querySelector('.biu-preview-frame');
   const previewImg  = preview.querySelector('img');
   const previewName = preview.querySelector('.biu-preview-name');
   const previewSpec = preview.querySelector('.biu-preview-spec');
+  const closeBtn    = preview.querySelector('.biu-preview-close');
+  let lastFocus;
 
   function show(photo) {
+    lastFocus = document.activeElement;
     const img = photo.querySelector('img');
     previewImg.src = img.src;
     previewImg.alt = img.alt;
@@ -157,27 +160,27 @@ function xtCopyText(text, onDone) {
     previewSpec.textContent = photo.querySelector('.biu-photo-spec')?.textContent || '';
     preview.classList.add('on');
     preview.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
   }
   function hide() {
     preview.classList.remove('on');
     preview.setAttribute('aria-hidden', 'true');
+    if (lastFocus) lastFocus.focus();
   }
 
-  document.querySelectorAll('.biu-photo').forEach(photo => {
-    photo.addEventListener('mouseenter', () => show(photo));
-    photo.addEventListener('mouseleave', hide);
-    photo.addEventListener('focus', () => show(photo));
-    photo.addEventListener('blur', hide);
+  document.querySelectorAll('[data-preview]').forEach(btn => {
+    if (!btn.closest('.biu-photo')) return;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      show(btn.closest('.biu-photo'));
+    });
   });
 
-  /* Escape dismisses without moving focus off the thumbnail */
+  closeBtn.addEventListener('click', hide);
+  preview.querySelector('.biu-preview-bg').addEventListener('click', hide);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && preview.classList.contains('on')) hide();
   });
-
-  /* Clicking inside the frame (e.g. selecting the caption text)
-     shouldn't be mistaken for leaving the thumbnail */
-  frame.addEventListener('mousedown', (e) => e.stopPropagation());
 })();
 
 /* ============================================================

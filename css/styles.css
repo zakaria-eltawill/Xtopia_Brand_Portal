@@ -710,27 +710,49 @@ blockquote cite { display: block; font-family: 'Acumin','Plus Jakarta Sans',sans
   mix-blend-mode: screen; opacity: 0; transition: opacity .4s ease;
 }
 .biu-photo:hover::before { opacity: 1; }
-.biu-photo:focus-visible { outline: 2px solid var(--accent-fg); outline-offset: -2px; }
 
-/* Hover preview — shows the full, uncropped photo (object-fit:contain,
-   not the grid's cover-crop) while a thumbnail is hovered or focused.
-   Fixed + centered rather than a click-opened modal, since this is
-   meant to follow attention passively, not demand a dismiss action. */
-.biu-preview {
-  position: fixed; inset: 0; z-index: 90; display: flex;
-  align-items: center; justify-content: center; padding: 64px;
-  pointer-events: none; opacity: 0;
-  background: rgba(0,10,18,.72); backdrop-filter: blur(4px);
-  transition: opacity .25s var(--ease-out);
+/* Preview button — appears on hover/focus, click opens the full photo */
+.biu-photo-preview-btn {
+  position: absolute; top: 50%; left: 50%; z-index: 3;
+  transform: translate(-50%, -50%) scale(.85);
+  width: 46px; height: 46px; border-radius: 50%; padding: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(239,237,227,.35); background: rgba(0,23,36,.55);
+  backdrop-filter: blur(3px); color: var(--cream);
+  opacity: 0; transition: opacity .25s var(--ease-out), transform .25s var(--ease-spring),
+                          background .2s, border-color .2s;
 }
-.biu-preview.on { opacity: 1; }
+.biu-photo:hover .biu-photo-preview-btn,
+.biu-photo-preview-btn:focus-visible {
+  opacity: 1; transform: translate(-50%, -50%) scale(1);
+}
+.biu-photo-preview-btn:hover {
+  background: rgba(0,23,36,.8); border-color: rgba(239,237,227,.6);
+}
+.biu-photo-preview-btn:focus-visible { outline: 2px solid var(--accent-fg); outline-offset: 2px; }
+.biu-photo-preview-btn svg { width: 19px; height: 19px; stroke-width: 1.6; }
+
+/* Preview modal — opened by the button above, shows the full source
+   image via object-fit:contain instead of the grid's cover-crop
+   (several source photos genuinely lose content at grid scale: A5
+   Envelope's two colorways, the Letterhead pair, etc). */
+.biu-preview {
+  position: fixed; inset: 0; z-index: 90; display: none;
+  align-items: center; justify-content: center; padding: 64px;
+}
+.biu-preview.on { display: flex; }
+.biu-preview-bg {
+  position: absolute; inset: 0; background: rgba(0,10,18,.72); backdrop-filter: blur(4px);
+  opacity: 0; transition: opacity .25s var(--ease-out);
+}
+.biu-preview.on .biu-preview-bg { opacity: 1; }
 .biu-preview-frame {
-  position: relative; max-width: 920px; max-height: 100%;
+  position: relative; z-index: 1; max-width: 920px; max-height: 100%;
   background: var(--bg-deep); border: 1px solid var(--card-border);
   border-radius: 16px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,.5);
-  transform: scale(.97); transition: transform .25s var(--ease-out);
+  opacity: 0; transform: scale(.97); transition: opacity .25s var(--ease-out), transform .25s var(--ease-out);
 }
-.biu-preview.on .biu-preview-frame { transform: none; }
+.biu-preview.on .biu-preview-frame { opacity: 1; transform: none; }
 .biu-preview-frame img {
   display: block; max-width: 100%; max-height: 68vh; width: auto; height: auto;
   object-fit: contain; margin: 0 auto; background: var(--navy-deep);
@@ -741,15 +763,23 @@ blockquote cite { display: block; font-family: 'Acumin','Plus Jakarta Sans',sans
 }
 .biu-preview-name { font-family: 'Acumin','Plus Jakarta Sans',sans-serif; font-size: 14px; font-weight: 600; color: var(--fg); }
 .biu-preview-spec { font-size: 12px; color: var(--fg-dim); }
+.biu-preview-close {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  width: 34px; height: 34px; border-radius: 50%; cursor: pointer; padding: 0;
+  border: 1px solid var(--card-border); background: var(--card); color: var(--fg);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .2s;
+}
+.biu-preview-close:hover { background: var(--divider); transform: rotate(90deg); }
+.biu-preview-close svg { width: 15px; height: 15px; stroke-width: 2; }
 
 @media (hover: none) {
-  /* No hover on touch — the preview isn't reachable, so don't leave
-     dead cursor/outline affordances implying an interaction that
-     can't happen here. */
-  .biu-photo { cursor: default; }
+  /* No hover on touch — keep the button reachable via a permanent,
+     lighter affordance instead of one that only appears on hover. */
+  .biu-photo-preview-btn { opacity: 1; transform: translate(-50%, -50%); background: rgba(0,23,36,.45); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .biu-preview, .biu-preview-frame { transition: none; }
+  .biu-preview-bg, .biu-preview-frame, .biu-photo-preview-btn { transition: none; }
 }
 
 /* ---------- Ecosystem ---------- */
