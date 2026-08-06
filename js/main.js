@@ -220,22 +220,6 @@ function xtCopyText(text, onDone) {
   const timingSection = document.querySelector('.motion-timing');
   if (timingSection) barsObs.observe(timingSection);
 
-  /* ── 6. BIU card subtle tilt on mousemove ── */
-  document.querySelectorAll('.biu-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      if (reducedMotion) return;
-      const rect  = card.getBoundingClientRect();
-      const cx    = rect.left + rect.width / 2;
-      const cy    = rect.top  + rect.height / 2;
-      const dx    = (e.clientX - cx) / (rect.width  / 2);
-      const dy    = (e.clientY - cy) / (rect.height / 2);
-      card.style.transform = `translateY(-5px) perspective(700px) rotateX(${-dy * 2.5}deg) rotateY(${dx * 2.5}deg)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
-  });
-
   /* ── 7. Letterform cells: interactive draw effect ── */
   document.querySelectorAll('.lf-cell').forEach(cell => {
     cell.setAttribute('tabindex', '0');
@@ -254,7 +238,7 @@ function xtCopyText(text, onDone) {
 
   /* ── 9. Nash-style spotlight: cursor → --mx / --my per card ── */
   if (!reducedMotion) {
-    const spotCards = document.querySelectorAll('.wm-bcard, .biu-card, .motion-card, .illus-item');
+    const spotCards = document.querySelectorAll('.wm-bcard, .motion-card, .illus-item, .biu-photo');
     spotCards.forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
