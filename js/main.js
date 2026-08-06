@@ -53,6 +53,26 @@ document.querySelector('.menu-btn')?.addEventListener('click', () => {
   document.querySelector('.sidebar').classList.toggle('open');
 });
 
+/* ── Shared clipboard helper ──
+   Modern API first; always falls back to a hidden-textarea +
+   execCommand rather than leaving a click with no feedback at all —
+   permission can be denied in a real browser too (unfocused page,
+   browser policy), not just in automation. */
+function xtCopyText(text, onDone) {
+  function legacy() {
+    const t = document.createElement('textarea');
+    t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); onDone(); } catch (_) {}
+    document.body.removeChild(t);
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(onDone, legacy);
+  } else {
+    legacy();
+  }
+}
+
 /* ── Copy-hex buttons on the Color palette cards ── */
 (function () {
   const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>';
@@ -74,24 +94,45 @@ document.querySelector('.menu-btn')?.addEventListener('click', () => {
       }, 1600);
     }
 
-    function fallbackCopy() {
-      const t = document.createElement('textarea');
-      t.value = hex; t.style.position = 'fixed'; t.style.opacity = '0';
-      document.body.appendChild(t); t.select();
-      try { document.execCommand('copy'); showCopied(); } catch (_) {}
-      document.body.removeChild(t);
-    }
-
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (navigator.clipboard && window.isSecureContext) {
-        /* Permission can be denied even in a real browser (unfocused
-           page, blocked by policy) — always fall back rather than
-           leave the click with no feedback at all. */
-        navigator.clipboard.writeText(hex).then(showCopied, fallbackCopy);
-      } else {
-        fallbackCopy();
-      }
+      xtCopyText(hex, showCopied);
+    });
+  });
+})();
+
+/* ── Iconography grid: click any icon to copy its SVG markup ── */
+(function () {
+  document.querySelectorAll('.icon-cell').forEach(cell => {
+    const svg = cell.querySelector('svg');
+    const nameEl = cell.querySelector('.icon-name');
+    if (!svg || !nameEl) return;
+
+    const name = nameEl.textContent;
+    const originalLabel = name;
+    let revertTimer;
+
+    cell.setAttribute('role', 'button');
+    cell.setAttribute('tabindex', '0');
+    cell.setAttribute('aria-label', 'Copy SVG markup for ' + name);
+
+    function showCopied() {
+      clearTimeout(revertTimer);
+      cell.classList.add('copied');
+      nameEl.textContent = 'Copied';
+      revertTimer = setTimeout(() => {
+        cell.classList.remove('copied');
+        nameEl.textContent = originalLabel;
+      }, 1400);
+    }
+
+    function copy() {
+      xtCopyText(svg.outerHTML, showCopied);
+    }
+
+    cell.addEventListener('click', copy);
+    cell.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copy(); }
     });
   });
 })();

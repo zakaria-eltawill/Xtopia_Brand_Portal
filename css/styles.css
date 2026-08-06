@@ -467,11 +467,24 @@ html[data-theme="light"] .vb-subs--adaptive .vb-sub-logos img { filter: brightne
 
 /* ---------- Iconography ---------- */
 .icon-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 1px; background: var(--divider); border: 1px solid var(--divider); margin-top: 28px; }
-.icon-cell { background: var(--bg); padding: 28px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; transition: background .2s; cursor: default; }
+.icon-cell {
+  background: var(--bg); padding: 28px 20px; display: flex; flex-direction: column;
+  align-items: center; gap: 14px; cursor: pointer; user-select: none;
+  transition: background .2s; outline-offset: -2px;
+}
 .icon-cell:hover { background: var(--card); }
-.icon-cell svg { width: 28px; height: 28px; color: var(--fg); transition: color .2s; }
+.icon-cell:focus-visible { outline: 2px solid var(--accent-fg); }
+.icon-cell svg { width: 28px; height: 28px; color: var(--fg); transition: color .2s, transform .2s var(--ease-spring); }
 .icon-cell:hover svg { color: var(--accent-fg); }
+.icon-cell:active svg { transform: scale(.9); }
 .icon-name { font-size: 10px; color: var(--fg-dim); text-transform: uppercase; letter-spacing: .08em; text-align: center; }
+.icon-cell.copied { background: rgba(255,106,114,.08); }
+.icon-cell.copied svg { color: var(--accent-fg); }
+.icon-cell.copied .icon-name { color: var(--accent-fg); }
+@media (prefers-reduced-motion: reduce) {
+  .icon-cell svg { transition: color .2s; }
+  .icon-cell:active svg { transform: none; }
+}
 
 /* ---------- Motion ---------- */
 .motion-principles { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; background: var(--divider); border: 1px solid var(--divider); margin-top: 40px; border-radius: 18px; overflow: hidden; }
