@@ -2,21 +2,32 @@
    XTOPIA Brand Portal — Main JS
    ============================================================ */
 
+/* Play the theme-matching motion video, pause the other — shared by
+   the click toggle and the on-load init so the two can never drift
+   out of sync with whatever data-theme actually is. */
+function syncMotionVideos(isLight) {
+  document.querySelectorAll('.vid-dark').forEach(v => {
+    if (isLight) { v.pause(); } else { v.currentTime = 0; v.play(); }
+  });
+  document.querySelectorAll('.vid-light').forEach(v => {
+    if (isLight) { v.currentTime = 0; v.play(); } else { v.pause(); }
+  });
+}
+
 function toggleTheme() {
   const html = document.documentElement;
   const isLight = html.getAttribute('data-theme') === 'light';
-  html.setAttribute('data-theme', isLight ? 'dark' : 'light');
-  document.getElementById('tt-dark').innerHTML  = isLight ? '<b>Dark</b>' : 'Dark';
-  document.getElementById('tt-light').innerHTML = isLight ? 'Light' : '<b>Light</b>';
-  /* Switch motion videos between dark/light versions */
   const goingLight = !isLight;
-  document.querySelectorAll('.vid-dark').forEach(v => {
-    if (goingLight) { v.pause(); } else { v.currentTime = 0; v.play(); }
-  });
-  document.querySelectorAll('.vid-light').forEach(v => {
-    if (goingLight) { v.currentTime = 0; v.play(); } else { v.pause(); }
-  });
+  html.setAttribute('data-theme', goingLight ? 'light' : 'dark');
+  document.getElementById('tt-dark').innerHTML  = goingLight ? 'Dark' : '<b>Dark</b>';
+  document.getElementById('tt-light').innerHTML = goingLight ? '<b>Light</b>' : 'Light';
+  syncMotionVideos(goingLight);
 }
+
+/* Match video playback to whatever data-theme is on load — the
+   markup only marks .vid-dark as autoplay, so without this the light
+   variant never starts if light is the page's default theme. */
+syncMotionVideos(document.documentElement.getAttribute('data-theme') === 'light');
 
 function replayMotionVid(name) {
   const stage = document.getElementById('stage-' + name);
