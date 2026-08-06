@@ -10,3 +10,10 @@ Thumbs.db
 aseets/XTOIPA_FILES/XTOPIA Brand identity_Folder/XTOPIA Brand identity.pdf
 aseets/XTOIPA_FILES/XTOPIA Brand Guideline Folder/Xtopia Brand Guideline.pdf
 aseets/XTOIPA_FILES/XTOPIA Company Profile/XTOPIA Company Profile .pdf
+
+# InDesign "Links" source images (~260MB) — reference assets for the
+# .indd file above, not used anywhere on the live site. Keeping these
+# tracked was blowing out the GitHub Pages build's checkout/artifact
+# size and causing the deploy to time out after 15 minutes.
+# Kept locally; not needed for the deployed site.
+aseets/XTOIPA_FILES/XTOPIA Brand Guideline Folder/Links/
