@@ -1,0 +1,9 @@
+# Cloudflare Workers static-assets deploy ignore file.
+# Without this, the build scans the whole repo directory (including
+# .git) for deployable assets — and .git's own internal pack file
+# (created by the clone Cloudflare does to fetch this repo) exceeds
+# the 25 MiB per-asset limit. None of this is part of the actual site.
+.git/
+.gitignore
+.nojekyll
+.claude/
