@@ -137,6 +137,49 @@ function xtCopyText(text, onDone) {
   });
 })();
 
+/* ── Brand in Use: hover preview of the full, uncropped photo ──
+   The grid crops every thumbnail to a fixed row height, so hovering
+   (or focusing, for keyboard users) opens a centered panel showing
+   the source image at its real proportions via object-fit:contain. */
+(function () {
+  const preview = document.getElementById('biu-preview');
+  if (!preview) return;
+  const frame   = preview.querySelector('.biu-preview-frame');
+  const previewImg  = preview.querySelector('img');
+  const previewName = preview.querySelector('.biu-preview-name');
+  const previewSpec = preview.querySelector('.biu-preview-spec');
+
+  function show(photo) {
+    const img = photo.querySelector('img');
+    previewImg.src = img.src;
+    previewImg.alt = img.alt;
+    previewName.textContent = photo.querySelector('.biu-photo-name')?.textContent || '';
+    previewSpec.textContent = photo.querySelector('.biu-photo-spec')?.textContent || '';
+    preview.classList.add('on');
+    preview.setAttribute('aria-hidden', 'false');
+  }
+  function hide() {
+    preview.classList.remove('on');
+    preview.setAttribute('aria-hidden', 'true');
+  }
+
+  document.querySelectorAll('.biu-photo').forEach(photo => {
+    photo.addEventListener('mouseenter', () => show(photo));
+    photo.addEventListener('mouseleave', hide);
+    photo.addEventListener('focus', () => show(photo));
+    photo.addEventListener('blur', hide);
+  });
+
+  /* Escape dismisses without moving focus off the thumbnail */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && preview.classList.contains('on')) hide();
+  });
+
+  /* Clicking inside the frame (e.g. selecting the caption text)
+     shouldn't be mistaken for leaving the thumbnail */
+  frame.addEventListener('mousedown', (e) => e.stopPropagation());
+})();
+
 /* ============================================================
    Animation System — IntersectionObserver
    ============================================================ */
