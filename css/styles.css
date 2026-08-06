@@ -882,15 +882,10 @@ html[data-theme="light"] .partners-cloud img { filter: brightness(0); }
 /* ---------- Components ---------- */
 .comp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; background: var(--divider); border: 1px solid var(--divider); border-radius: 20px; overflow: hidden; }
 .comp-card { background: var(--bg); display: flex; flex-direction: column; }
-.comp-card--full { grid-column: span 3; }
 .comp-card-tag { padding: 11px 20px; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; color: var(--fg-dim); border-bottom: 1px solid var(--divider); }
 .comp-demo-area { flex: 1; padding: 48px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 200px; }
-.comp-demo-area--row { flex-direction: row; align-items: stretch; gap: 2px; padding: 32px; background: var(--divider); justify-content: stretch; }
-.comp-demo-area--row .card-comp { flex: 1; margin: 0; }
 .comp-card-info { padding: 18px 20px; border-top: 1px solid var(--divider); }
-.comp-card--full .comp-card-info { display: flex; align-items: baseline; gap: 24px; }
 .comp-card-name { font-family: 'Acumin','Plus Jakarta Sans',sans-serif; font-size: 13px; color: var(--fg); display: block; margin-bottom: 5px; flex-shrink: 0; }
-.comp-card--full .comp-card-name { margin-bottom: 0; }
 .comp-card-desc { font-size: 13px; color: var(--fg-dim); line-height: 1.6; margin: 0; }
 .comp-label { font-family: 'Acumin','Plus Jakarta Sans',sans-serif; font-size: 14px; margin-bottom: 8px; }
 .comp-desc  { font-size: 14px; color: var(--fg-dim); }
@@ -904,10 +899,6 @@ html[data-theme="light"] .partners-cloud img { filter: brightness(0); }
 .badge.active .dot { background: #7FD97F; }
 .badge.soon   .dot { background: var(--sage); }
 .stat-comp { font-family: 'Acumin','Plus Jakarta Sans',sans-serif; font-size: 40px; font-weight: 800; color: var(--accent-fg); }
-.card-comp { background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 24px; }
-.card-comp .card-eyebrow { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-fg); margin-bottom: 10px; }
-.card-comp .card-title { font-family: 'Acumin','Plus Jakarta Sans',sans-serif; font-size: 20px; margin-bottom: 8px; }
-.card-comp .card-body   { font-size: 14px; color: var(--fg-dim); }
 
 /* ---------- Beam Ring — border beam for existing cards -------
    CSS mask technique: shows only the 1px border ring of the
@@ -2142,9 +2133,6 @@ html[data-theme="light"] .illus-overlay {
   .photo-grid .ph.wide { grid-column: span 2; }
   .comp-row { grid-template-columns: 1fr; }
   .comp-grid { grid-template-columns: 1fr; }
-  .comp-card--full { grid-column: span 1; }
-  .comp-demo-area--row { flex-direction: column; padding: 20px; }
-  .comp-card--full .comp-card-info { flex-direction: column; gap: 6px; }
   .vertical-block { grid-template-columns: 1fr; gap: 28px; }
   .vertical-logos { grid-template-columns: 1fr 1fr; }
   .menu-btn {
