@@ -894,7 +894,7 @@ html[data-theme="light"] .partners-cloud img { filter: brightness(0); }
 .comp-card-desc { font-size: 13px; color: var(--fg-dim); line-height: 1.6; margin: 0; }
 .comp-label { font-family: 'Acumin','Plus Jakarta Sans',sans-serif; font-size: 14px; margin-bottom: 8px; }
 .comp-desc  { font-size: 14px; color: var(--fg-dim); }
-.btn { display: inline-block; padding: 14px 28px; border-radius: 999px; font-size: 14px; font-weight: 600; letter-spacing: .02em; text-decoration: none; cursor: pointer; transition: opacity .2s; }
+.btn { display: inline-block; padding: 14px 28px; border-radius: 999px; font-size: 14px; font-weight: 600; letter-spacing: .02em; text-decoration: none; cursor: pointer; transition: opacity .2s; font-family: inherit; }
 .btn:hover { opacity: .85; }
 .btn-primary { background: var(--accent); color: #fff; border: none; }
 .btn-ghost   { border: 1px solid var(--card-border); color: var(--fg); background: transparent; }
