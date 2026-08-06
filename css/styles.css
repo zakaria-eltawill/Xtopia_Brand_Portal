@@ -343,12 +343,44 @@ html[data-theme="light"] .vb-subs--adaptive .vb-sub-logos img { filter: brightne
 .color-row { display: grid; gap: 2px; }
 .color-primaries { grid-template-columns: 1fr 1fr; }
 .color-secondaries { grid-template-columns: repeat(4,1fr); }
-.color-block { padding: 36px 32px 28px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 150px; }
+.color-block { position: relative; padding: 36px 32px 28px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 150px; }
 .color-block--lg { min-height: 200px; padding: 48px 40px 36px; }
 .cb-role { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; opacity: .55; margin-bottom: 12px; }
 .cb-name { font-family: 'Acumin','Plus Jakarta Sans',sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
 .color-block--lg .cb-name { font-size: 36px; }
 .cb-hex { font-size: 12px; font-family: 'Courier New',monospace; letter-spacing: .04em; margin-top: 8px; opacity: .6; }
+
+/* Copy-hex button — sits top-right of every color card. Uses
+   currentColor (set by each card's inline style) so it reads
+   correctly on both dark and light swatches without extra rules. */
+.cb-copy {
+  position: absolute; top: 16px; right: 16px; z-index: 1;
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 30px; padding: 0 11px; border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  color: currentColor; cursor: pointer; font-family: inherit;
+  font-size: 10.5px; font-weight: 600; letter-spacing: .04em;
+  opacity: 0; transform: translateY(-3px);
+  transition: opacity .2s var(--ease-out), transform .2s var(--ease-out),
+              background .2s, border-color .2s;
+}
+.color-block:hover .cb-copy,
+.color-block:focus-within .cb-copy,
+.cb-copy:focus-visible { opacity: 1; transform: none; }
+.cb-copy:hover { background: color-mix(in srgb, currentColor 20%, transparent); border-color: color-mix(in srgb, currentColor 45%, transparent); }
+.cb-copy svg { width: 13px; height: 13px; stroke-width: 2; flex: none; }
+.cb-copy .cb-copy-label { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width .25s var(--ease-out); }
+.cb-copy.copied { opacity: 1; transform: none; background: color-mix(in srgb, currentColor 20%, transparent); }
+.cb-copy.copied .cb-copy-label { max-width: 50px; }
+
+/* Touch devices have no hover — keep the button reachable */
+@media (hover: none) {
+  .cb-copy { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cb-copy, .cb-copy .cb-copy-label { transition: none; }
+}
 
 /* Signal note */
 .color-signal-note { display: flex; gap: 24px; align-items: flex-start; margin-top: 28px; padding: 28px 32px; border: 1px solid var(--divider); border-radius: 12px; background: var(--card); }

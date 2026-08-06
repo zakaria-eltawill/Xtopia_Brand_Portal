@@ -53,6 +53,49 @@ document.querySelector('.menu-btn')?.addEventListener('click', () => {
   document.querySelector('.sidebar').classList.toggle('open');
 });
 
+/* ── Copy-hex buttons on the Color palette cards ── */
+(function () {
+  const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>';
+  const COPY_ICON  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+
+  document.querySelectorAll('.cb-copy').forEach(btn => {
+    const hex = btn.dataset.hex;
+    let revertTimer;
+
+    function showCopied() {
+      clearTimeout(revertTimer);
+      btn.classList.add('copied');
+      btn.querySelector('svg').outerHTML = CHECK_ICON;
+      btn.setAttribute('aria-label', 'Copied ' + hex);
+      revertTimer = setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.querySelector('svg').outerHTML = COPY_ICON;
+        btn.setAttribute('aria-label', 'Copy hex code ' + hex);
+      }, 1600);
+    }
+
+    function fallbackCopy() {
+      const t = document.createElement('textarea');
+      t.value = hex; t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); showCopied(); } catch (_) {}
+      document.body.removeChild(t);
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (navigator.clipboard && window.isSecureContext) {
+        /* Permission can be denied even in a real browser (unfocused
+           page, blocked by policy) — always fall back rather than
+           leave the click with no feedback at all. */
+        navigator.clipboard.writeText(hex).then(showCopied, fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+    });
+  });
+})();
+
 /* ============================================================
    Animation System — IntersectionObserver
    ============================================================ */
